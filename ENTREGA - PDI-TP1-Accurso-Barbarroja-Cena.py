@@ -202,20 +202,6 @@ def dividir_preguntas(celdas_dict, offset=4, th_linea=230):
         celdas_dict[f"{preg}_SI"] = celda_si
         celdas_dict[f"{preg}_NO"] = celda_no
 
-        # 🚨 ADICIONAR LÍNEA CRÍTICA
-        #celdas_dict.pop(preg) 
-
-    # # 1. Proyección de píxeles dentro de esta celda
-    # img_th = celda_pregunta_completa < th_linea
-    # col_sums = np.sum(img_th, axis=0)
-
-    # # 2. Encuentra el pico de la línea divisoria central
-    # x_split = np.argmax(col_sums)
-
-    # # 3. Divide usando el índice x_split
-    # celda_si = celda_pregunta_completa[:, :x_split - offset]
-    # celda_no = celda_pregunta_completa[:, x_split + offset:]
-
     return celdas_dict
 
 
@@ -258,7 +244,7 @@ def validar_por_cantidad(conteos):
         elif campo == "Nombre y apellido":
             resultados[campo] = "OK" if 2 <= n <= 25 else "MAL"
         elif campo == "Edad":
-            resultados[campo] = "OK" if 1 <= n <= 3 else "MAL"
+            resultados[campo] = "OK" if 1 < n <= 3 else "MAL"
         elif campo == "Mail":
             resultados[campo] = "OK" if n <= 25 and n > 0 else "MAL"
         elif campo == "Legajo":
@@ -368,10 +354,6 @@ def identificar_tipo_formulario(celda, th_area_min=5, min_space=7):
 # VALIDACIONES POR CANTIDAD DE PALABRAS
 # ============================================================
 def validar_palabras(celdas_dict, resultados, th_area_min=5, min_space=5):
-    '''# Tipo Formulario
-    campo = "Tipo Formulario"
-    n_pal, recortes = contar_palabras(celdas_dict[campo], th_area_min, min_space, devolver_recortes=True)
-    resultados[campo] = recortes[1] if len(recortes) > 1 else "Desconocido"'''
 
     # Nombre y Apellido
     campo = "Nombre y apellido"
@@ -448,7 +430,7 @@ def crear_indicador(crop, estado_global, width=30):
 # ============================================================
 def guardar_resultados_csv(id_formulario, resultados, nombre_archivo="resultados.csv"):
 
-    encabezado = ["ID", "Nombre y Apellido", "Edad", "Mail", "Legajo",
+    encabezado = ["ID", "Nombre y apellido", "Edad", "Mail", "Legajo",
                   "Pregunta 1", "Pregunta 2", "Pregunta 3", "Comentarios"]
 
     # Verificar si el archivo ya existe intentando abrirlo
@@ -529,3 +511,4 @@ reporte = np.vstack(lista_crops_con_indicador)
 cv2.imwrite(path_guardar, reporte)
 print("\n Imagen de resumen generada como: resumen_validaciones_simple.png")
 print("Archivo CSV guardado como: resultados_validacion.csv")
+
